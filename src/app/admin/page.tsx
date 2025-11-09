@@ -16,6 +16,17 @@ function formatDuration(startIso?: string | null) {
   return `${h}:${m}:${s}`;
 }
 
+// format remaining countdown time
+function formatCountdown(startIso?: string | null, countdownSeconds?: number | null) {
+  if (!startIso || !countdownSeconds) return '00:00:00';
+  const elapsed = Math.floor((Date.now() - new Date(startIso).getTime()) / 1000);
+  const remaining = Math.max(0, countdownSeconds - elapsed);
+  const h = Math.floor(remaining / 3600).toString().padStart(2, '0');
+  const m = Math.floor((remaining % 3600) / 60).toString().padStart(2, '0');
+  const s = (remaining % 60).toString().padStart(2, '0');
+  return `${h}:${m}:${s}`;
+}
+
 export default function AdminPage() {
   // state untuk menyimpan daftar komputer, komputer yang dipilih, nama pengguna, dan status loading
   const [computers, setComputers] = useState<Computer[]>([]);
@@ -75,6 +86,7 @@ export default function AdminPage() {
         status: "idle",
         user_name: null,
         start_time: null,
+        countdown_seconds: null,
       })
       .eq("id", id);
 
@@ -101,7 +113,16 @@ export default function AdminPage() {
               </div>
 
               <div className="text-right">
-                <div className="font-mono text-lg mb-2">{formatDuration(c.start_time)}</div>
+                <div className="mb-2">
+                  <div className="text-xs text-gray-500 mb-1">Waktu Penggunaan</div>
+                  <div className="font-mono text-lg">{formatDuration(c.start_time)}</div>
+                </div>
+                {c.countdown_seconds && (
+                  <div className="mb-2">
+                    <div className="text-xs text-gray-500 mb-1">Waktu Tersisa</div>
+                    <div className="font-mono text-lg font-bold text-blue-600">{formatCountdown(c.start_time, c.countdown_seconds)}</div>
+                  </div>
+                )}
                 <div className="flex gap-2 justify-end">
                   <button onClick={() => stopSession(c.id)} className="px-3 py-1 bg-red-600 text-white rounded">Paksa berhenti</button>
                 </div>

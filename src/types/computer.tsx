@@ -4,5 +4,6 @@ export type Computer = {
   status: 'idle' | 'in_use' | 'offline';
   user_name?: string | null;
   start_time?: string | null;
+  countdown_seconds?: number | null;
   updated_at?: string | null;
 };
