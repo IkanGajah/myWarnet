@@ -17,9 +17,9 @@ export default function Home() {
             <h2 className="text-4xl font-bold mb-6">Selamat Datang!</h2>
             <p className="mb-2 text-lg text-gray-600 ">Selamat datang, ini adalah web warnet yang kami gunakan untuk memonitor komputer-komputer di warnet kami. 
               Untuk mulai menggunakan komputer, silahkan kunjungi halaman Komputer dan pilih PC yang tersedia atau bisa klik tombol dibawah. 
-              Setelah selesai, pastikan untuk mengakhiri sesi Anda agar komputer siap digunakan oleh pelanggan berikutnya.</p>
+              Setelah selesai, pastikan untuk mengakhiri sesi agar komputer siap digunakan oleh pelanggan berikutnya.</p>
           </div>
-          <Link href='./user' className="px-1 py-2 mr-auto ml-auto text-2xl mt-10 bg-green-600 text-white rounded flex justify-center">Mulai pilih komputer dari sini!</Link>
+          <Link href='/komputer' className="px-1 py-2 mr-auto ml-auto text-2xl mt-10 bg-green-600 text-white outline-2 hover:bg-white hover:text-black font-bold rounded flex justify-center outline">Mulai dari sini!</Link>
         </div>
       </div>
     </main>
