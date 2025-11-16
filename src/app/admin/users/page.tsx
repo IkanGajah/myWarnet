@@ -64,7 +64,7 @@ export default function UserManagementPage() {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'users' },
         (payload) => {
-          // Cukup panggil load() lagi untuk data terbaru
+          console.log('Perubahan terdeteksi di client (users):', payload);
           load();
         }
       )
@@ -73,9 +73,9 @@ export default function UserManagementPage() {
     const compChannel = supabase.channel('public:computers')
         .on(
           'postgres_changes',
-          { event: '*', schema: 'public', table: 'users' },
+          { event: '*', schema: 'public', table: 'computers' },
           (payload) => {
-            // Cukup panggil load() lagi untuk data terbaru
+            console.log('Perubahan terdeteksi di client (komputer):', payload);
             load();
           }
         )

@@ -64,6 +64,7 @@ export default function AdminPage() {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'computers' },
         (payload) => {
+          console.log('Perubahan terdeteksi di client (komputer):', payload);
           load();
         }
       )
@@ -72,8 +73,9 @@ export default function AdminPage() {
     const usersChannel = supabase.channel('public:users')
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'computers' },
+        { event: '*', schema: 'public', table: 'users' },
         (payload) => {
+          console.log('Perubahan terdeteksi di client (user):', payload);
           load();
         }
       )

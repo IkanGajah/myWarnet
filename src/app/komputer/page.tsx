@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Computer, UserAccount } from '@/types/computer';
-import { time } from 'console';
 
 export default function ClientPage() {
   // state untuk menyimpan daftar komputer, komputer yang dipilih, nama pengguna, dan status loading
@@ -86,8 +85,12 @@ export default function ClientPage() {
         // Ditemukan sesi aktif!
         return alert(`Pengguna ini sudah tercatat aktif di komputer "${activeSession.name}"! Selesaikan sesi di sana terlebih dahulu.`);
       }
-    } catch (error: any) {
-      return alert(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        return alert(error.message);
+      }
+      // Fallback jika error adalah tipe lain
+      return alert("Terjadi error yang tidak diketahui saat validasi sesi.");
     }
     
     const startTime = new Date();
