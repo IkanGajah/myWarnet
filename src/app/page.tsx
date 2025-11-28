@@ -8,7 +8,7 @@ export default function Home() {
     <main>
       <div className="rounded-lg overflow-hidden shadow-lg max-w-8xl mx-auto">
         <div className="pt-18 flex flex-col justify-center items-center text-center text-black bg-gray-100 px-4">
-          <Image src="/assetImage/sybau.jpg" alt="Profile" className="w-40 h-40 rounded-full shadow-lg border-4 border-black mb-6 object-cover" width={200} height={200} />
+          <Image src="/assetImage/hengker.jpg" alt="Profile" className="w-40 h-40 rounded-full shadow-lg border-4 border-black mb-6 object-cover" width={200} height={200} />
           <h1 className="text-5xl font-bold mb-2">Warnetku</h1>
           <p className="text-lg">Warnet kecil</p>        
         </div>
