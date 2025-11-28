@@ -82,8 +82,7 @@ export default function UserManagementPage() {
         .subscribe();
 
     intervalRef.current = window.setInterval(() => {
-      // Kita hanya perlu memicu re-render.
-      // Cara sederhana: update state computers ke nilai yg sama.
+      // picu re-render dengan update state computers ke nilai yg sama
       setComputers(prev => [...prev]);
     }, 1000);
     
@@ -146,6 +145,15 @@ export default function UserManagementPage() {
     else load();
   }
 
+  async function handleResetTime(userId: string) {
+    const { error } = await supabase
+      .from('users')
+      .update({ time_balance_seconds: 0 })
+      .eq('id', userId);
+    if (error) alert('Gagal reset waktu: ' + error.message);
+    else load();
+  }
+
   const getUserTotalBalance = (user: UserAccount): number => {
     // 1. Ambil saldo "dompet" (dari tabel users)
     const walletBalance = user.time_balance_seconds || 0;
@@ -171,6 +179,7 @@ export default function UserManagementPage() {
             <div className="mb-6 flex gap-2 p-4 bg-white rounded shadow">
                 <input 
                 className="border p-2 rounded w-full bg-white"
+                maxLength={30}
                 value={newUsername}
                 onChange={(e) => setNewUsername(e.target.value)}
                 placeholder="Nama pengguna baru..."
@@ -198,6 +207,12 @@ export default function UserManagementPage() {
                                     className="px-2 py-1 bg-red-600 text-white rounded text-sm cursor-pointer"
                                 >
                                     Hapus
+                                </button>
+                                <button 
+                                    onClick={() => handleResetTime(user.id)} 
+                                    className="px-2 py-1 bg-red-600 text-white rounded text-sm cursor-pointer"
+                                >
+                                    Reset Waktu
                                 </button>
                                 <button 
                                     onClick={() => handleEditUsername(user.id, prompt('Masukkan nama pengguna baru:', user.username) || user.username)} 

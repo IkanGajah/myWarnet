@@ -83,7 +83,23 @@ export default function AdminPage() {
 
 
     intervalRef.current = window.setInterval(() => {
-      setComputers(prev => [...prev]);
+      setComputers(prev => { 
+        const now = Date.now();
+        prev.forEach(c => {
+          if (c.status === 'in_use' && c.session_end_time) {
+            const endTime = new Date(c.session_end_time).getTime();
+            if (now >= endTime) {
+              console.log(`Waktu ${c.name} telah habis, menghentikan...`);
+              supabase
+                .from("computers") 
+                .update({ status: "idle", user_id: null, session_end_time: null })
+                .eq("id", c.id)
+                .then();
+            }
+          }
+        });
+        return [...prev]
+      });
     }, 1000);
 
     return () => {

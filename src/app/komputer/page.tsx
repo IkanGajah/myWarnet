@@ -10,7 +10,6 @@ export default function ClientPage() {
   const [users, setUsers] = useState<UserAccount[]>([]);
   const [selectedComputerId, setSelectedComputerId] = useState<string | null>(null);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-
   const [loading, setLoading] = useState(true);
 
   async function load(){
@@ -181,7 +180,7 @@ export default function ClientPage() {
   // interface pengguna
   return (
     <div className="bg-gray-100 p-6 rounded shadow-md max-w-8xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4">Pake komputer</h2>
+      <h2 className="text-2xl font-semibold mb-4">Pakai komputer</h2>
 
       {loading ? <p>Loading...</p> : (
         <div className="space-y-4">
@@ -222,8 +221,8 @@ export default function ClientPage() {
           </div>
 
           <div className="flex gap-3">
-            <button onClick={startSession} className="px-4 py-2 bg-green-600 text-white rounded cursor-pointer">Mulai Pake</button>
-            <button onClick={endSession} className="px-4 py-2 bg-red-600 text-white rounded cursor-pointer">Selesai Pake</button>
+            <button onClick={startSession} className="px-4 py-2 bg-green-600 text-white rounded cursor-pointer">Mulai Pakai</button>
+            <button onClick={endSession} className="px-4 py-2 bg-red-600 text-white rounded cursor-pointer">Selesai Pakai</button>
           </div>
         </div>
       )}

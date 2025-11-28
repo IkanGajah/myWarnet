@@ -19,7 +19,8 @@ export default function Home() {
               Untuk mulai menggunakan komputer, silahkan kunjungi halaman Komputer dan pilih PC yang tersedia atau bisa klik tombol dibawah. 
               Setelah selesai, pastikan untuk mengakhiri sesi agar komputer siap digunakan oleh pelanggan berikutnya.</p>
           </div>
-          <Link href='/komputer' className="px-1 py-2 mr-auto ml-auto text-2xl mt-10 bg-green-600 text-white outline-2 hover:bg-white hover:text-black font-bold rounded flex justify-center outline">Mulai dari sini!</Link>
+          <Link href='/komputer' className="px-1 py-2 mr-auto ml-auto max-w-5xl
+           text-2xl mt-10 bg-green-600 text-white outline-2 hover:bg-white hover:text-black font-bold rounded flex justify-center outline">Mulai dari sini!</Link>
         </div>
       </div>
     </main>
