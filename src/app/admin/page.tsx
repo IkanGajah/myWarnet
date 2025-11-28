@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Computer, UserAccount } from '@/types/computer';
 
-// format duration dari waktu mulai hingga sekarang
 function formatRemainingTime(endIso?: string | null) {
   if (!endIso) return '00:00:00';
   const end = new Date(endIso).getTime();
@@ -17,13 +16,11 @@ function formatRemainingTime(endIso?: string | null) {
 }
 
 export default function AdminPage() {
-  // state untuk menyimpan daftar komputer, komputer yang dipilih, nama pengguna, dan status loading
   const [computers, setComputers] = useState<Computer[]>([]);
   const [users, setUsers] = useState<Map<string, UserAccount>>(new Map());
   const [loading, setLoading] = useState(true);
   const intervalRef = useRef<number | null>(null);
 
-  // mengambil data komputer dari supabase
   useEffect(() => {
     let mounted = true;
 
@@ -110,6 +107,7 @@ export default function AdminPage() {
     };
   }, []);
 
+  // dijalankan saat tombol paksa berhenti diklik
   async function stopSession(computerId: string) {
     console.log("Stopping PC with id:", computerId); 
 

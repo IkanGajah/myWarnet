@@ -5,7 +5,6 @@ import { supabase } from '@/lib/supabase';
 import { Computer, UserAccount } from '@/types/computer';
 
 export default function ClientPage() {
-  // state untuk menyimpan daftar komputer, komputer yang dipilih, nama pengguna, dan status loading
   const [computers, setComputers] = useState<Computer[]>([]);
   const [users, setUsers] = useState<UserAccount[]>([]);
   const [selectedComputerId, setSelectedComputerId] = useState<string | null>(null);
@@ -24,11 +23,8 @@ export default function ClientPage() {
       setLoading(false);
     }
 
-  // mengambil data komputer dari supabase
   useEffect(() => {    
     load();
-
-    // subscribe ke perubahan realtime 
     const channel = supabase.channel('computers-realtime-client')
       .on(
         'postgres_changes', 
@@ -51,7 +47,7 @@ export default function ClientPage() {
     return () => { supabase.removeChannel(channel);};
   }, []);
 
-  // dijalankan saat tombol untuk mulai sesi diklik
+  // dijalankan saat tombol mulai pakai diklik
   async function startSession() {
     if (!selectedComputerId || !selectedUserId) return alert('Pilih komputer dan pengguna!');
     
@@ -71,24 +67,22 @@ export default function ClientPage() {
     try {
       const { data: activeSession, error: activeSessionError } = await supabase
         .from('computers')
-        .select('id, name') // Ambil data PC yg sedang dipakai
+        .select('id, name') 
         .eq('user_id', selectedUserId)
         .eq('status', 'in_use')
-        .maybeSingle(); // Cari satu sesi aktif
+        .maybeSingle(); 
 
       if (activeSessionError) {
         throw new Error('Gagal memvalidasi sesi pengguna: ' + activeSessionError.message);
       }
 
       if (activeSession) {
-        // Ditemukan sesi aktif!
         return alert(`Pengguna ini sudah tercatat aktif di komputer "${activeSession.name}"! Selesaikan sesi di sana terlebih dahulu.`);
       }
     } catch (error) {
       if (error instanceof Error) {
         return alert(error.message);
       }
-      // Fallback jika error adalah tipe lain
       return alert("Terjadi error yang tidak diketahui saat validasi sesi.");
     }
     
@@ -125,7 +119,7 @@ export default function ClientPage() {
     alert('Sesi dimulai.');
   }
 
-  // dijalankan saat tombol untuk akhiri sesi diklik
+  // dijalankan saat tombol selesai pakai diklik
   async function endSession() {
     if (!selectedComputerId || !selectedUserId) return alert('Pilih komputer dan pengguna! yang sesuai');
     const { data: computer, error: compFetchError } = await supabase
@@ -177,7 +171,6 @@ export default function ClientPage() {
     return str;
   }
 
-  // interface pengguna
   return (
     <div className="bg-gray-100 p-6 rounded shadow-md max-w-8xl mx-auto">
       <h2 className="text-2xl font-semibold mb-4">Pakai komputer</h2>

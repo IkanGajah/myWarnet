@@ -4,10 +4,8 @@ import { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Computer, UserAccount } from '@/types/computer'; 
 
-// Fungsi helper untuk menambah waktu (jam ke detik)
 const addHoursInSeconds = (hours: number) => hours * 3600;
 
-// Fungsi helper untuk format detik ke H:M:S
 function formatSecondsToHMS(sec: number) {
   const h = Math.floor(sec / 3600).toString().padStart(2, '0');
   const m = Math.floor((sec % 3600) / 60).toString().padStart(2, '0');
@@ -19,9 +17,9 @@ function getRemainingSeconds(endIso?: string | null): number {
   if (!endIso) return 0;
   
   const end = new Date(endIso).getTime();
-  const diff = Math.max(0, end - Date.now()); // Selisih dalam milidetik
+  const diff = Math.max(0, end - Date.now()); 
   
-  return Math.floor(diff / 1000); // Kembalikan dalam detik
+  return Math.floor(diff / 1000); 
 }
 
 export default function UserManagementPage() {
@@ -36,7 +34,7 @@ export default function UserManagementPage() {
     try {
       const [userResponse, compResponse] = await Promise.all([
         supabase.from('users').select('*').order('username'),
-        supabase.from('computers').select('*') // Kita perlu data komputer
+        supabase.from('computers').select('*') 
       ]);
 
       const { data: userData, error: userError } = userResponse;
@@ -51,14 +49,12 @@ export default function UserManagementPage() {
     } catch (error) {
       console.error("Gagal load data:", error);
     } finally {
-      setLoading(false); // Set loading false hanya di akhir
+      setLoading(false); 
     }
   }
 
   useEffect(() => {
     load();
-
-    // Subscribe ke perubahan tabel users
     const userChannel = supabase.channel('public:users')
       .on(
         'postgres_changes',
@@ -81,8 +77,8 @@ export default function UserManagementPage() {
         )
         .subscribe();
 
+    // Set interval untuk update sisa waktu setiap detik
     intervalRef.current = window.setInterval(() => {
-      // picu re-render dengan update state computers ke nilai yg sama
       setComputers(prev => [...prev]);
     }, 1000);
     
@@ -94,7 +90,7 @@ export default function UserManagementPage() {
 
   }, []);
 
-  // Fitur 1: Tambah User
+  // Tambah User
   async function handleAddUser() {
     if (!newUsername) return alert('Nama user tidak boleh kosong');
     
@@ -110,7 +106,7 @@ export default function UserManagementPage() {
     }
   }
 
-  // Fitur 2: Hapus User
+  // Hapus user
   async function handleDeleteUser(userId: string) {
     if (confirm('Yakin ingin menghapus user ini? Sesi aktif mereka mungkin error.')) {
       const { error } = await supabase.from('users').delete().eq('id', userId);
@@ -128,14 +124,13 @@ export default function UserManagementPage() {
     else load();
   }
 
-  // Fitur 3: Tambah Waktu ke User
+  // Tambah saldo waktu ke user
   async function handleAddTime(userId: string, hours: number) {
     const user = users.find(u => u.id === userId);
     if (!user) return;
 
     const secondsToAdd = addHoursInSeconds(hours);
     
-    // buat RPC function di Supabase
     const { error } = await supabase.rpc('add_to_balance', {
         user_id_input: userId,
         seconds_to_add: secondsToAdd
@@ -145,6 +140,7 @@ export default function UserManagementPage() {
     else load();
   }
 
+  // Reset saldo waktu user ke 0
   async function handleResetTime(userId: string) {
     const { error } = await supabase
       .from('users')
@@ -154,19 +150,13 @@ export default function UserManagementPage() {
     else load();
   }
 
+  // Hitung total saldo waktu (dompet + sesi aktif)
   const getUserTotalBalance = (user: UserAccount): number => {
-    // 1. Ambil saldo "dompet" (dari tabel users)
     const walletBalance = user.time_balance_seconds || 0;
-
-    // 2. Cari sesi aktif pengguna ini
     const activeComputer = computers.find(
       c => c.user_id === user.id && c.status === 'in_use'
     );
-
-    // 3. Hitung sisa waktu sesi (jika ada)
     const sessionBalance = getRemainingSeconds(activeComputer?.session_end_time);
-
-    // 4. Jumlahkan keduanya
     return walletBalance + sessionBalance;
   };
 
