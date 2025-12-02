@@ -47,7 +47,6 @@ export default function ClientPage() {
     return () => { supabase.removeChannel(channel);};
   }, []);
 
-  // dijalankan saat tombol mulai pakai diklik
   async function startSession() {
     if (!selectedComputerId || !selectedUserId) return alert('Pilih komputer dan pengguna!');
     
@@ -119,7 +118,6 @@ export default function ClientPage() {
     alert('Sesi dimulai.');
   }
 
-  // dijalankan saat tombol selesai pakai diklik
   async function endSession() {
     if (!selectedComputerId || !selectedUserId) return alert('Pilih komputer dan pengguna! yang sesuai');
     const { data: computer, error: compFetchError } = await supabase

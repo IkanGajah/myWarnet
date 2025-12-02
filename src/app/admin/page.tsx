@@ -107,7 +107,6 @@ export default function AdminPage() {
     };
   }, []);
 
-  // dijalankan saat tombol paksa berhenti diklik
   async function stopSession(computerId: string) {
     console.log("Stopping PC with id:", computerId); 
 
@@ -152,7 +151,7 @@ export default function AdminPage() {
       .eq('computer_id', computerId)
       .is('end_time', null);
 
-    console.log("PC stopped successfully ✅");
+    console.log("PC stopped successfully");
   }
 
   const getUsername = (userId: string | null | undefined) => {

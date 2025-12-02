@@ -29,7 +29,6 @@ export default function UserManagementPage() {
   const [loading, setLoading] = useState(true);
   const intervalRef = useRef<number | null>(null);
 
-  // Load semua pengguna
   async function load() {
     try {
       const [userResponse, compResponse] = await Promise.all([
@@ -77,7 +76,6 @@ export default function UserManagementPage() {
         )
         .subscribe();
 
-    // Set interval untuk update sisa waktu setiap detik
     intervalRef.current = window.setInterval(() => {
       setComputers(prev => [...prev]);
     }, 1000);
@@ -90,13 +88,12 @@ export default function UserManagementPage() {
 
   }, []);
 
-  // Tambah User
   async function handleAddUser() {
     if (!newUsername) return alert('Nama user tidak boleh kosong');
     
     const { error } = await supabase
       .from('users')
-      .insert({ username: newUsername, time_balance_seconds: 0 }); // Saldo awal 0
+      .insert({ username: newUsername, time_balance_seconds: 0 }); 
       
     if (error) {
       alert('Gagal menambah user: ' + error.message);
@@ -106,7 +103,6 @@ export default function UserManagementPage() {
     }
   }
 
-  // Hapus user
   async function handleDeleteUser(userId: string) {
     if (confirm('Yakin ingin menghapus user ini? Sesi aktif mereka mungkin error.')) {
       const { error } = await supabase.from('users').delete().eq('id', userId);
@@ -124,7 +120,6 @@ export default function UserManagementPage() {
     else load();
   }
 
-  // Tambah saldo waktu ke user
   async function handleAddTime(userId: string, hours: number) {
     const user = users.find(u => u.id === userId);
     if (!user) return;
@@ -140,7 +135,6 @@ export default function UserManagementPage() {
     else load();
   }
 
-  // Reset saldo waktu user ke 0
   async function handleResetTime(userId: string) {
     const { error } = await supabase
       .from('users')
@@ -150,7 +144,6 @@ export default function UserManagementPage() {
     else load();
   }
 
-  // Hitung total saldo waktu (dompet + sesi aktif)
   const getUserTotalBalance = (user: UserAccount): number => {
     const walletBalance = user.time_balance_seconds || 0;
     const activeComputer = computers.find(
